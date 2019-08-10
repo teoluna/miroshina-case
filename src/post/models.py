@@ -12,8 +12,9 @@ class Post(models.Model):
 
 def __str__(self):
     return "{} on {}".format (
-self.title,
-self.pub_date.strftime('%Y-%m-%m'))
+        self.title,
+        self.pub_date.strftime('%Y-%m-%m')
+    )
 
 class Meta:
     verbose_name = 'investment thesis'
