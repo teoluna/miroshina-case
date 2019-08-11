@@ -1,34 +1,57 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 # Create your models here.
-class Post(models.Model):
-    title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=50, unique_for_month='pub_date')
-    text = models.TextField()
-    pub_date = models.DateField('date published', auto_now_add=True)
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+class Rating(models.Model):
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    value = models.DecimalField(max_digits=7, decimal_places=2)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friendship_creator_set")
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friend_set")
 
-def __str__(self):
-    return "{} on {}".format (
-        self.title,
-        self.pub_date.strftime('%Y-%m-%m')
-    )
 
-class Meta:
-    verbose_name = 'investment thesis'
-    ordering = ['-pub_date', 'title']
-    get_latest_by = 'pub_date'
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rating = models.DecimalField(max_digits=7, decimal_places=2, default=0.0)
 
-class Company(models.Model):
-    name = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=50, unique=True)
-    description = models.TextField()
-    pe_ratio = models.DecimalField(max_digits=7, decimal_places=2)
-    
-def __str__(self):
-    return self.name
+    def get_connections(self):
+        connections = Rating.objects.filter(creator=self.user)
+        return connections
+          
+    def get_followers(self):
+        followers = Rating.objects.filter(following=self.user)
+        return followers
 
-class Meta:
-    ordering = ['name']
+    def __str__(self):
+        return "{} Profile".format(self.user.username)
+
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+post_save.connect(create_profile, sender=User)
+post_save.connect(save_profile, sender=User)
+
+
+def create_rating(sender, instance, created, **kwargs):
+    if created:
+        target = instance.following
+        followers = target.profile.get_followers() # ratings
+
+        total = 0
+        for rating in followers:
+            total += rating.value
+
+        avg = total / len(followers)
+
+        target.profile.rating = avg
+
+        target.profile.save()
+
+post_save.connect(create_rating, sender=Rating)
