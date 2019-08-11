@@ -1,10 +1,14 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.mixins import ListModelMixin
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .models import Post, Company
 from .serializers import PostSerializer
 from django.shortcuts import get_object_or_404
+
+from rest_framework.permissions import IsAuthenticated
+
 
 # Create your views here.
 class PostView(ListCreateAPIView):
@@ -19,3 +23,8 @@ class PostView(ListCreateAPIView):
 class SingleArticleView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class HelloWorldView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+        return Response({'message': 'Hello World'})
