@@ -165,7 +165,7 @@ input.search-bar{
 
 <br>
   <form class="container search-container">
-    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="What can I help you with today?">
+    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search for users and ratings">
   </form>
 
 <br>
@@ -346,7 +346,7 @@ $(".auth-container").on("submit", () => {
             getProfile(accessToken, (profile) => {
                 rating = profile.rating;
                 username = profile.username;
-                $(".search-bar").attr("placeholder", "What can I help you with today, " + username + "?").val("").focus().blur();
+                $(".search-bar").attr("placeholder", "Search for users and ratings, " + username + "").val("").focus().blur();
             });
             authorization.close();
         }
