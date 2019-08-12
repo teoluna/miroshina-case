@@ -165,7 +165,7 @@ input.search-bar{
 
 <br>
   <form class="container search-container">
-    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search and rate by clicking on images">
+    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search and rate by clicking on highlighted users">
   </form>
 
 <br>
@@ -197,7 +197,7 @@ input.search-bar{
   <div onclick="initRatingModal('{{creator}}');" class="photo-item">
     <img class="photo-item__image" src="{{image}}" alt="{{value}} points {{following}} by {{creator}}" />
     <p style="background-color: #FFFFFF" class="photo-item__caption">
-      <b>{{value}}</b> points to <b>{{following}}</b> by <b>{{creator}}</b>
+      <b>{{value}}</b> points to <b>{{following}}</b> by <b style="background-color: #FFFF00">{{creator}}</b>
     </p>
   </div>
 </script>
@@ -344,7 +344,7 @@ $(".auth-container").on("submit", () => {
             getProfile(accessToken, (profile) => {
                 rating = profile.rating;
                 username = profile.username;
-                $(".search-bar").attr("placeholder", "Search for users and click on ratings, " + username + "").val("").focus().blur();
+                $("#search-bar").attr("placeholder", $('#search-bar').attr('placeholder') + ", " + username + "").val("").focus().blur();
             });
             authorization.close();
         }
