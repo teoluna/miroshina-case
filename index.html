@@ -165,7 +165,7 @@ input.search-bar{
 
 <br>
   <form class="container search-container">
-    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search for users and ratings">
+    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search for users and click on ratings">
   </form>
 
 <br>
@@ -194,19 +194,21 @@ input.search-bar{
 
 <!-- .photo-item template HTML -->
 <script type="text/html" id="photo-item-template">
-  <div class="photo-item">
-    <img class="photo-item__image" src="https://dummyimage.com/700x700/{{bg_hex}}/2b318c" alt="{{value}} points {{following}} by {{creator}}" />
-    <p class="photo-item__caption">
-      <b>{{value}}</b> points <b>{{following}}</b> <a onclick="initRatingModal(this);" class='profile-modal' href="#">by {{creator}}</a>
+  <div onclick="initRatingModal('{{creator}}');" class="photo-item">
+    <img class="photo-item__image" src="https://picsum.photos/640/360" alt="{{value}} points {{following}} by {{creator}}" />
+    <p style="background-color: #FFFFFF" class="photo-item__caption">
+      <b>{{value}}</b> points to <b>{{following}}</b> by <b>{{creator}}</b>
     </p>
   </div>
 </script>
 
 
 <script>
+let apiUrl = 'localhost:8001';
+
 let getProfile  = (token, callback) => {
     $.ajax({
-        url: 'http://165.22.26.137:8001/api/profile/',
+        url: 'http://'+ apiUrl +'/api/profile/',
         headers: {
             Authorization: 'Token ' + token
         },
@@ -277,7 +279,7 @@ ratingModal.addFooterBtn('Rate', 'tingle-btn tingle-btn--primary', function() {
             headers: {
                 Authorization: 'Token ' + accessToken
             },
-            url: 'http://165.22.26.137:8001/api/rate/',
+            url: 'http://'+ apiUrl +'/api/rate/',
             data: {
                 'user_id': $('#blogger').text(),
                 'value': $('#myRate').val()
@@ -312,7 +314,7 @@ let initRatingModal = (e) => {
         ratingModal.setContent(`
             <div class="row">
                 <div class="col-12">
-                    <h1 id="blogger" >${e.innerHTML}</h1>
+                    <h1 id="blogger" >${e}</h1>
                 </div>
             </div>
             <div class="row">
@@ -333,7 +335,7 @@ var username = 'anon';
 $(".auth-container").on("submit", () => {
     $.ajax({
         type: 'POST',
-        url: 'http://165.22.26.137:8001/api/auth/',
+        url: 'http://'+ apiUrl +'/api/auth/',
         data: {
             login: $('#auth-input').val()
         },
@@ -342,7 +344,7 @@ $(".auth-container").on("submit", () => {
             getProfile(accessToken, (profile) => {
                 rating = profile.rating;
                 username = profile.username;
-                $(".search-bar").attr("placeholder", "Search for users and ratings, " + username + "").val("").focus().blur();
+                $(".search-bar").attr("placeholder", "Search for users and click on ratings, " + username + "").val("").focus().blur();
             });
             authorization.close();
         }
@@ -367,7 +369,7 @@ let getInfScroll = (page, search = '', from = null, to = null) => {
     // use element to turn HTML string into elements
     let iScroll =  new InfiniteScroll( '.grid', {
         path: function() {
-            let url = 'http://165.22.26.137:8001/api/ratings/?ordering=-created&page=' + this.pageIndex + '&search=' + search;
+            let url = 'http://'+ apiUrl +'/api/ratings/?ordering=-created&page=' + this.pageIndex + '&search=' + search;
             if (from) {
                 url += '&value_min=' + from;
             }
@@ -435,7 +437,7 @@ $(document).ready(function(){
     });
 
     $.ajax({
-      url: 'http://165.22.26.137:8001/api/ratings/max/',
+      url: 'http://'+ apiUrl +'/api/ratings/max/',
       success: (response) => {
           value_max = response.value__max;
 
