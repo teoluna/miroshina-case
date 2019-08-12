@@ -396,20 +396,6 @@ let getInfScroll = (page, search = '', from = null, to = null) => {
 
 var infScroll;
 
-$.ajax({
-    url: 'http://localhost:8001/api/ratings/max/',
-    success: (response) => {
-        value_max = response.value__max;
-
-        $(".js-range-slider").data("ionRangeSlider").update({
-            to: value_max,
-            max: value_max
-        });
-        
-        infScroll = getInfScroll(0, search, value_min, value_max);
-    }
-})
-
 $(document).ready(function(){
 
     $("#search-bar").on("keyup", function() {
@@ -436,6 +422,20 @@ $(document).ready(function(){
             infScroll = getInfScroll(1, search, value_min, value_max)
         },
     });
+
+    $.ajax({
+      url: 'http://localhost:8001/api/ratings/max/',
+      success: (response) => {
+          value_max = response.value__max;
+
+          $(".js-range-slider").data("ionRangeSlider").update({
+              to: value_max,
+              max: value_max
+          });
+          
+          infScroll = getInfScroll(0, search, value_min, value_max);
+      }
+    })  
 });
 
 
