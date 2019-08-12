@@ -103,9 +103,14 @@ class ProfileRatingAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     
     def get(self, request):
-        profile = self.request.user.profile
+        
+        profile = Profile.objects.filter(user=self.request.user).first()
+
+        if profile is None:
+            profile = Profile.objects.create(user=self.request.user)
+
         return Response({
-            'username': profile.user.username,
+            'username': self.request.user.username,
             'rating': profile.rating
         })
         
