@@ -237,8 +237,17 @@ var authorization = new tingle.modal({
 authorization.setContent(`
     <div class="center-block">
         <form class="container auth-container">
-            <input id="auth-input" type="text" class="search-bar" placeholder="Write your name and press Enter">
-            <input type="submit" value="Submit">
+            <br>
+            <div class="row justify-content-md-center">
+                        
+              <div class="col-12">
+                <input id="auth-input" type="text" class="search-bar" placeholder="Write your name and press Enter">
+              </div>
+              <div class="col-12"><br></div>
+              <div class="col-12">
+                <input class="col-12" type="submit" value="Submit">
+              </div>
+            </div>
         </form>
     </div>
 `)
