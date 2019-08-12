@@ -417,6 +417,9 @@ $(document).ready(function(){
         infScroll = getInfScroll(0, search, value_min, value_max)
     });
 
+    $("#search-bar").on("submit", () => {
+        return false;
+    });
 
     $(".js-range-slider").ionRangeSlider({
         type: "double",
