@@ -208,7 +208,7 @@ input.search-bar{
 <script>
 let getProfile  = (token, callback) => {
     $.ajax({
-        url: 'http://localhost:8001/api/profile/',
+        url: 'http://165.22.26.137:8001/api/profile/',
         headers: {
             Authorization: 'Token ' + token
         },
@@ -269,7 +269,7 @@ ratingModal.addFooterBtn('Rate', 'tingle-btn tingle-btn--primary', function() {
             headers: {
                 Authorization: 'Token ' + accessToken
             },
-            url: 'http://localhost:8001/api/rate/',
+            url: 'http://165.22.26.137:8001/api/rate/',
             data: {
                 'user_id': $('#blogger').text(),
                 'value': $('#myRate').val()
@@ -325,7 +325,7 @@ var username = 'anon';
 $(".auth-container").on("submit", () => {
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8001/api/auth/',
+        url: 'http://165.22.26.137:8001/api/auth/',
         data: {
             login: $('#auth-input').val()
         },
@@ -359,7 +359,7 @@ let getInfScroll = (page, search = '', from = null, to = null) => {
     // use element to turn HTML string into elements
     let iScroll =  new InfiniteScroll( '.grid', {
         path: function() {
-            let url = 'http://localhost:8001/api/ratings/?ordering=-created&page=' + this.pageIndex + '&search=' + search;
+            let url = 'http://165.22.26.137:8001/api/ratings/?ordering=-created&page=' + this.pageIndex + '&search=' + search;
             if (from) {
                 url += '&value_min=' + from;
             }
@@ -424,7 +424,7 @@ $(document).ready(function(){
     });
 
     $.ajax({
-      url: 'http://localhost:8001/api/ratings/max/',
+      url: 'http://165.22.26.137:8001/api/ratings/max/',
       success: (response) => {
           value_max = response.value__max;
 
