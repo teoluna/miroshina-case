@@ -38,8 +38,7 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = [
             'user',
             'following',
-            'follows_requesting_user',
-            'follow_link',
+            'follows_requesting_user'
         ]
 
     def get_following(self, obj):
@@ -53,3 +52,31 @@ class UserListSerializer(serializers.ModelSerializer):
         following = obj.user
         connected = Rating.objects.filter(creator=following, following=creator)
         return len(connected)
+
+class RatingListSerializer(serializers.Serializer):
+
+    creator = serializers.StringRelatedField()
+    following = serializers.StringRelatedField()
+    value = serializers.StringRelatedField()
+    bg_hex = serializers.SerializerMethodField()
+
+    def get_bg_hex(self, obj):
+        if obj.value < 2:
+            color = '929488'
+        elif obj.value < 8:
+            color = '76689e'
+        elif obj.value < 15:
+            color = 'a652ff'
+        else:
+            color = '000'
+
+        return color
+
+    class Meta:
+        model = Rating
+        fields = [
+            'creator',
+            'following',
+            'value',
+            'bg_hex'
+        ]
