@@ -165,7 +165,7 @@ input.search-bar{
 
 <br>
   <form class="container search-container">
-    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search for users and click on ratings">
+    <input type="text" id="search-bar" class="search-bar" class="search-bar" placeholder="Search and rate by clicking on images">
   </form>
 
 <br>
@@ -195,7 +195,7 @@ input.search-bar{
 <!-- .photo-item template HTML -->
 <script type="text/html" id="photo-item-template">
   <div onclick="initRatingModal('{{creator}}');" class="photo-item">
-    <img class="photo-item__image" src="https://picsum.photos/700/700" alt="{{value}} points {{following}} by {{creator}}" />
+    <img class="photo-item__image" src="{{image}}" alt="{{value}} points {{following}} by {{creator}}" />
     <p style="background-color: #FFFFFF" class="photo-item__caption">
       <b>{{value}}</b> points to <b>{{following}}</b> by <b>{{creator}}</b>
     </p>
@@ -462,7 +462,13 @@ function getItemHTML( photo ) {
 // micro templating, sort-of
 function microTemplate( src, data ) {
   // replace {{tags}} in source
+  let tmpRating  =  Math.round(data['value']);
   return src.replace( /\{\{([\w\-_\.]+)\}\}/gi, function( match, key ) {
+
+    if (key === 'image') {
+      return 'https://picsum.photos/id/' + tmpRating +'/700/700';
+    }
+
     // walk through objects to get value
     var value = data;
     key.split('.').forEach( function( part ) {
