@@ -1,0 +1,1 @@
+let apiUrl = 'localhost:8000';
